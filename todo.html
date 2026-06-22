@@ -1,0 +1,132 @@
+<html>
+    <head>
+        <title>To-Do List</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body{
+                font-family: Arial,sans-serif;
+                background-color: #f0f4f8;
+                display: flex;
+                justify-content: center;
+                padding: 40px 20px;
+            }
+            .container{
+                background-color: white;
+                border-radius: 15px;
+                padding: 30px;
+                width: 100%;
+                max-width: 500px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+            h1{
+                text-align: center;
+                color: #2c3e50;
+                margin-bottom: 25px;
+            }
+            .input-area{
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            input{
+                flex: 1;
+                padding: 12px 15px;
+                border: 2px solid #e0e0e0;
+                border-radius: 25px;
+                outline: none;
+            }
+            input:focus{
+                border-color: purple;
+            }
+            #addBtn{
+                padding: 12px 25px;
+                background-color: purple;
+                color: white;
+                border: none;
+                border-radius: 25px;
+                font-size: 15px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            #addBtn:hover{
+                background-color: blueviolet;
+            }
+            #taskList{
+                list-style: none;
+            }
+            .task-item{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 15px;
+                margin-bottom: 10px;
+                background-color: #f8f8f8;
+                border-radius: 10px;
+                border-left: 4px solid purple;
+
+            }
+            .task-item button{
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                margin-left: 5px;
+            }
+            .completed{
+                text-decoration: line-through;
+                color: #999;
+            }
+
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1> 📝 My To-Do List</h1>
+            <div class="input-area">
+                <input type="text" id="taskInput" placeholder="Enter a task...">
+                <button id="addBtn">Add</button>
+            </div>
+            <ul id="taskList"></ul>
+        </div>
+        <script>
+            document.getElementById("addBtn").addEventListener("click",function(){
+                let taskText = document.getElementById("taskInput").value;
+                if(taskText === ""){
+                    alert("Please enter a task!");
+                    return;
+                }
+                let li = document.createElement("li");
+                li.className = "task-item";
+                li.innerHTML = `<span>${taskText}</span>
+                <div><button class="doneBtn">✅</button>
+                     <button class="deleteBtn">❌</button>
+                </div>
+                `;
+                document.getElementById("taskList").appendChild(li)
+                localStorage.setItem("tasks",document.getElementById("taskList").innerHTML);
+                document.getElementById("taskInput").value = "";
+
+
+            });
+            document.getElementById("taskList").addEventListener("click",function(event){
+                if(event.target.classList.contains("doneBtn")){
+                    let task = event.target.closest(".task-item");
+                    task.querySelector("span").classList.toggle("completed");
+                }
+                if(event.target.classList.contains("deleteBtn")){
+                    let task = event.target.closest(".task-item");
+                    task.remove();
+                }
+            });
+            let savedTasks = localStorage.getItem("tasks");
+            if(savedTasks){
+                document.getElementById("taskList").innerHTML = savedTasks;
+            }
+        </script>
+    </body>
+</html>
